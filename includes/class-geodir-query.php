@@ -265,8 +265,11 @@ class GeoDir_Query {
 				$s = trim( esc_attr( wp_strip_all_tags( $s ) ) );
 			}
 
-			if ( is_null( $s ) ) {
+			// Global $s may be overridden by other plugins with non string value(ex: array).
+			if ( is_null( $s ) || ! is_scalar( $s ) ) {
 				$s = '';
+			} else {
+				$s = (string) $s;
 			}
 
 			// Exact search with quotes
