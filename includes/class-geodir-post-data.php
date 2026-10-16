@@ -390,8 +390,8 @@ class GeoDir_Post_Data {
 
 		if ( ! empty( $posts ) ) {
 			foreach ( $posts as $post ) {
-				if ( $post->ID ) {
-					wp_delete_post( $post->ID, true );
+				// Deletion can be prevented via pre_delete_post filter, keep the temp media values in that case.
+				if ( $post->ID && wp_delete_post( $post->ID, true ) ) {
 					delete_post_meta( $post->post_parent, "__" . $post->ID ); // delete any temp stored media values from auto saves
 				}
 			}
@@ -1314,7 +1314,7 @@ class GeoDir_Post_Data {
 
 		$result = wp_delete_post( (int) $post_data['ID'], true );
 
-		if ( ! empty( $post_data['post_parent'] ) ) {
+		if ( $result && ! empty( $post_data['post_parent'] ) ) {
 			delete_post_meta( (int) $post_data['post_parent'], "__" . (int) $post_data['ID'] ); // Delete any temp stored media values from auto saves.
 		}
 
