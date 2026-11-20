@@ -664,6 +664,31 @@ function geodir_sanitize_textarea_field( $str ) {
 }
 
 /**
+ * Neutralise shortcode brackets so the content can never be parsed by do_shortcode().
+ *
+ * Square brackets are converted to their HTML entities, which display identically
+ * in the browser but are not recognised by the WordPress shortcode parser. Use this
+ * on user supplied content (like review text) that may be output inside content which
+ * is later passed through do_shortcode().
+ *
+ * @since 2.8.208
+ *
+ * @param string $content Content to escape.
+ * @return string Escaped content.
+ */
+function geodir_escape_shortcodes( $content ) {
+	if ( ! is_string( $content ) || $content === '' ) {
+		return $content;
+	}
+
+	if ( strpos( $content, '[' ) === false && strpos( $content, ']' ) === false ) {
+		return $content;
+	}
+
+	return str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $content );
+}
+
+/**
  * Strip shortcodes/blocks from content.
  *
  *

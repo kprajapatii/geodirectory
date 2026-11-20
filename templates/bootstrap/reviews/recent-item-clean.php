@@ -29,7 +29,7 @@ $comment_excerpt = geodir_utf8_substr( $comment_content, 0, 150 ) . '&#8230;';
 	<div class="card h-100 mw-100 shadow-sm border-0">
 		<div class="card-body">
 			<div class="fs-xs mb-2"><?php echo geodir_get_rating_stars( $comment->rating, $comment_post_ID ); ?></div>
-			<p class="geodir_reviewer_text p-0 m-0 fs-base text-muted"><?php echo esc_html( $comment_excerpt ); ?></p>
+			<p class="geodir_reviewer_text p-0 m-0 fs-base text-muted"><?php echo geodir_escape_shortcodes( esc_html( $comment_excerpt ) ); ?></p>
 		</div>
 
 		<div class="card-footer border-0 pt-0 d-flex align-items-center">

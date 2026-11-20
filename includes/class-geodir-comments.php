@@ -19,6 +19,9 @@ class GeoDir_Comments {
 		add_action( 'comment_form_logged_in_after', array( __CLASS__, 'rating_input' ) );
 		add_action( 'comment_form_before_fields', array( __CLASS__, 'rating_input' ) );
 
+		// Prevent shortcodes in review text from being executed when reviews are output inside the listing content.
+		add_filter( 'comment_text', array( __CLASS__, 'escape_comment_shortcodes' ), 1, 2 );
+
 		// add ratings to comment text
 		add_filter( 'comment_text', array( __CLASS__, 'wrap_comment_text' ), 40, 2 );
 
@@ -602,6 +605,28 @@ class GeoDir_Comments {
 		}
 
 		return $comment_template;
+	}
+
+	/**
+	 * Escape shortcodes in GD review text.
+	 *
+	 * GD reviews are rendered by the reviews tab inside the listing content, which is
+	 * passed through do_shortcode() again (the_content priority 11, page builders,
+	 * nested blocks). Comment text is never meant to run shortcodes (WordPress core
+	 * does not run them on comments), so neutralise the brackets.
+	 *
+	 * @since 2.8.208
+	 *
+	 * @param string $content The comment content.
+	 * @param object|string $comment The comment object.
+	 * @return string The comment content.
+	 */
+	public static function escape_comment_shortcodes( $content, $comment = '' ) {
+		if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( (int) $comment->comment_post_ID ) ) ) {
+			$content = geodir_escape_shortcodes( $content );
+		}
+
+		return $content;
 	}
 
 	/**

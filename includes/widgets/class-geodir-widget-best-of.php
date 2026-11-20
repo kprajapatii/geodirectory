@@ -826,7 +826,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$review = $wpdb->get_row( $query );
 
 		if ( ! empty( $review ) ) {
-			$excerpt = strip_tags( $review->comment_content );
+			$excerpt = geodir_escape_shortcodes( strip_tags( $review->comment_content ) );
 		}
 
 		return $excerpt;

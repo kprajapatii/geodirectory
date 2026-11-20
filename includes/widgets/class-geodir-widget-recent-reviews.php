@@ -606,12 +606,12 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
 			$comment_content_length = geodir_utf8_strlen( $comment_content );
 			if ( $comment_content_length > $comment_lenth ) {
-				$comment_excerpt = trim( geodir_utf8_substr( $comment_content, 0, $comment_lenth ) );
+				$comment_excerpt = geodir_escape_shortcodes( trim( geodir_utf8_substr( $comment_content, 0, $comment_lenth ) ) );
 
 				/* translators: 1: Comment text, 2: Read more link. */
 				$comment_excerpt = wp_sprintf( _x( '%1$s&hellip; %2$s', 'Recent review comment excerpt', 'geodirectory' ), $comment_excerpt, $read_more );
 			} else {
-				$comment_excerpt = $comment_content;
+				$comment_excerpt = geodir_escape_shortcodes( $comment_content );
 			}
 
 			if ( $comment->user_id ) {
